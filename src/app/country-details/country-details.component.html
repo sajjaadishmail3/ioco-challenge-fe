@@ -1,0 +1,12 @@
+<div class="container" *ngIf="country; else errorTemplate">
+  <h2>{{ country.name }}</h2>
+  <p><strong>Population:</strong> {{ country.population }}</p>
+  <p><strong>Capital:</strong> {{ country.capital }}</p>
+  <div>
+    <button (click)="goBack()">🔙 Back to Home</button>
+  </div>
+</div>
+
+<ng-template #errorTemplate>
+  <p class="error">Country details could not be found.</p>
+</ng-template>
