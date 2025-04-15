@@ -2,9 +2,9 @@ name: Angular CI/CD Pipeline
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 env:
   NODE_VERSION: '20'
@@ -33,9 +33,10 @@ jobs:
       with:
         version: ${{ env.CHROME_VERSION }}
 
-    - name: Run unit tests
-      run: npm test -- --watch=false --browsers=ChromeHeadless --code-coverage
-
+    - name: Run unit tests with proper setup
+      run: |
+        npm test -- --watch=false --browsers=ChromeHeadless --code-coverage --include=src/**/*.spec.ts
+        
     - name: Upload coverage report
       uses: actions/upload-artifact@v4
       with:
