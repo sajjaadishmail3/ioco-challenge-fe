@@ -4,12 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build:prod": "ng build --configuration=production --prerender=false",
-    "build:prod:no-ssr": "ng build --configuration=production",
+    "build": "ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch=false --browsers=ChromeHeadless",
-    "test:ci": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
-    "serve:ssr:ioco-challenge-fe": "node dist/ioco-challenge-fe/server/server.mjs"
+    "test:ci": "ng test --watch=false --browsers=ChromeHeadless --code-coverage"
   },
   "private": true,
   "dependencies": {
