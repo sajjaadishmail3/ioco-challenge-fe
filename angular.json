@@ -51,6 +51,7 @@
                 }
               ],
               "prerender": false,
+              "ssr": false,
               "outputHashing": "all"
             },
             "development": {
