@@ -2,94 +2,32 @@ name: Angular CI/CD Pipeline for ioco challenge frontend
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
   pull_request:
-    branches:
-      - master
+    branches: [ master ]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Ensure `test:ci` Script Exists
-        run: npm run test || echo "test:ci script missing, skipping..."
-
-      - name: Run Tests
-        run: npm run test:ci || true
-
   build:
     runs-on: ubuntu-latest
-    needs: test
+
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          cache: 'npm'
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
 
-      - name: Install Dependencies
-        run: npm ci
+    - name: Install dependencies
+      run: npm ci
 
-      - name: Build Angular App
-        run: npm run build
+    - name: Run linting
+      run: npm run lint
 
-  package:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+    - name: Run tests
+      run: npm test
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Create Production Build
-        run: npm run build --prod
-
-      - name: Archive Build Artifacts
-        run: tar -czf dist.tar.gz dist/
-
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: angular-build
-          path: dist.tar.gz
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: package
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: angular-build
-          path: dist/
-
-      - name: Deploy to GitHub Pages
-        run: |
-          npm run deploy
+    - name: Build application
+      run: npm run build -- --configuration=production
